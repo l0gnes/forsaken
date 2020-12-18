@@ -1,0 +1,3 @@
+fps-limit: 200  # This value should be pretty straight-forward unless you're a caveman. Setting to `null` = No limit
+fps-display: true # Shows a little FPS counter at the top of the screen, in case you're into that, ironically it lowers fps slightly
+ram-display: true
