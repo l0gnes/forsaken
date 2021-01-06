@@ -1,0 +1,20 @@
+#### FORMAT ####
+LICENSE [[CC LINK]]
+	(ASSET NAME) - (AUTHOR NAME)
+	  >> (LINK TO ASSET PAGE)
+#### FORMAT ####
+
+------------------------------------------------------------------
+All of the assets mentioned below are released under the licenses:
+------------------------------------------------------------------
+
+CC By 4.0 [[https://creativecommons.org/licenses/by/4.0/#]]
+	Fool.ttf - Francisco (Void) Beltrán
+	  >> https://arcade.itch.io/fool
+
+CC0 [[https://creativecommons.org/publicdomain/zero/1.0/]]
+	Bountiful Bits - https://v3x3d.itch.io/
+	  >> https://v3x3d.itch.io/bountiful-bits
+
+	Bit Bonanza - https://v3x3d.itch.io/
+	  >> https://v3x3d.itch.io/bit-bonanza
