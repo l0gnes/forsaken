@@ -19,12 +19,15 @@ class MainMenuSurface(object):
             # ID : Height
         }
 
+        self.SECRET_PHRASE = [] # Will load secret phrase characters into here
+
         self.logo = pygame.image.load(
             './assets/logo.png'
         ).convert()
 
     def event_hook(self, event):
         if event.type == pygame.KEYDOWN:
+            print(pygame.key.name(event.key))
             if event.key == pygame.K_DOWN:
                 self.POINTER_INDEX += 1 if self.POINTER_INDEX+1 < len(self.LIST_MENU_OPTIONS) else 0
                 self.game.SoundHandle.attempt_play('menuswitch')
@@ -34,7 +37,10 @@ class MainMenuSurface(object):
             elif event.key == pygame.K_RETURN:
                 # TODO: Make the text in the menu flash or something i don't know
                 self.game.SoundHandle.attempt_play('menuselectdrastic')
-                list(self.LIST_MENU_OPTIONS.values())[self.POINTER_INDEX]()
+                
+                self.game.WindowHandle.do_with_fade(
+                    list(self.LIST_MENU_OPTIONS.values())[self.POINTER_INDEX]()
+                )
 
     def load_game_screen(self):
         print("not implemented yet again")
