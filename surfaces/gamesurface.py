@@ -14,7 +14,7 @@ class GameSurface(object):
         )
 
         sur = self.game.FONT.render(
-            "FUCK YOU",
+            "poggers",
             True,
             'black'
         )
