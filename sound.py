@@ -19,6 +19,8 @@ class SoundHandler(object):
             pygame.mixer.init()
 
     def load_sounds(self):
+        self.game.LOGGING.info("Loading Sounds...")
+
         files = glob.glob(
             "./assets/wav/*.wav",
             recursive=True
@@ -26,11 +28,11 @@ class SoundHandler(object):
         for i in files:
             refname = os.path.splitext(os.path.split(i)[1])[0]
             self.SOUNDS[refname] = pygame.mixer.Sound(file=i)
-            print(refname, ".wav loaded!")
 
-
+            self.game.LOGGING.debug("Sound %s Loaded!" % refname)
 
     def attempt_play(self, soundref, *args, **kwargs):
+        self.game.LOGGING.debug("Attempting to play a sound \"%s\"" % soundref)
         pygame.mixer.find_channel().play(self.SOUNDS[soundref], *args, **kwargs)
 
         

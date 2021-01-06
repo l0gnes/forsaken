@@ -27,6 +27,9 @@ class EventHandler(object):
         if hasattr(self.game.WindowHandle.ACTIVE_SURFACE, 'event_hook'):
             self.game.WindowHandle.ACTIVE_SURFACE.event_hook(ev)
 
+        for extension in self.game.EXTENSIONS.values():
+            extension.event_hook(ev)
+
         if ev.type in self.event_mapping.keys():
             return self.event_mapping[ev.type](ev)
         else:

@@ -7,6 +7,8 @@ import sys, os
 
 import events, window, game
 
+__verison__ = "Alpha v0.3"
+
 if __name__ == "__main__":
     # Adding a dummy driver for the PI
     #os.environ['SDL_VIDEODRIVER'] = 'dummy'
@@ -15,7 +17,7 @@ if __name__ == "__main__":
     global WindowHandle
     SETTINGS = sethand.load_settings_file(create_if_not_exists=True)
 
-    pygame.display.set_caption("Alex's Game")
+    pygame.display.set_caption("Forsaken")
     screen = pygame.display.set_mode((512, 512), 0, 32)
     pygame.init()
     pygame.display.init()
