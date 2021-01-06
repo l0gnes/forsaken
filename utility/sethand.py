@@ -9,19 +9,36 @@ _DEFAULT_CONFIGS = [
     {
         "varname" : "fps-limit",
         "default" : 120,
-        "comment" : "This value should be pretty straight-forward unless you're a caveman. Setting to `null` = No limit"
+        "comment" : "This value should be pretty straight-forward unless you're a caveman. Setting to `null` = No limit."
     },
 
     {
         "varname" : "fps-display",
         "default" : False,
-        "comment" : "Shows a little FPS counter at the top of the screen, in case you're into that, ironically it lowers fps slightly"
+        "comment" : "Shows a little FPS counter at the top of the screen, in case you're into that, ironically it lowers fps slightly."
     },
 
     {
         'varname' : 'ram-display',
         'default' : False,
-        'comment' : "Shows how many MB of ram the python process is using"
+        'comment' : "Shows how many MB of ram the python process is using."
+    },
+
+    {
+        'varname' : 'disabled-extensions',
+        'default' : [
+            "here is an extension i dont want",
+            "this is another extension i dont want",
+            "this extension breaks my game!!",
+            "example 4!"
+        ],
+        'comment' : 'A list of all of the disabled extensions, not to be loaded on startup.'
+    },
+
+    {
+        'varname' : 'console-debug-logs',
+        'default' : False,
+        'comment' : 'When the console is open, this will show verbose information logs, usually only for development.'
     }
 ]
 
@@ -69,6 +86,11 @@ def create_settings_file(comments : bool = True):
         )
 
     with open('./config.yml', 'w+') as ymlfile:
+        yaml.indent( # QOL Indenting <3
+            offset = 2,
+            mapping = 2,
+            sequence= 4
+        )
         yaml.dump(
             data, ymlfile
         )
@@ -87,7 +109,7 @@ def load_settings_file(include_defaults : bool = True, create_if_not_exists : bo
     yaml = ruamel.yaml.YAML()
 
     if not os.path.exists('./config.yml'):
-        return create_if_not_exists(comments = True)
+        return create_settings_file(comments = True)
     
     with open('./config.yml', 'r') as cf:
         conf = yaml.load(cf)
