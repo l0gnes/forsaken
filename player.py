@@ -1,4 +1,5 @@
 import pygame
+import inventory
 
 PLAYER_SIZE = (16, 16)
 
@@ -7,11 +8,13 @@ class PlayerObject(pygame.sprite.Sprite):
         # Init base class
         pygame.sprite.Sprite.__init__(self)
 
-        self.height, self.width = PLAYER_SIZE 
+        self.height, self.width = PLAYER_SIZE
         self.image = pygame.Surface((self.height, self.width))
         self.image.fill('red') # TODO: Do something about this
 
         self.rect = self.image.get_rect()
+
+        self.INVENTORY = inventory.InventoryHandler(self)
 
     def draw(self, screen):
         screen.blit(self.image, self.location)
