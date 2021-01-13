@@ -13,8 +13,8 @@ class GameSurface(object):
             'red'
         )
 
-        sur = self.game.FONT.render(
-            "poggers",
+        sur = self.game.LARGE_FONT.render(
+            "FUCK YOU",
             True,
             'black'
         )

@@ -1,4 +1,6 @@
 import pygame
+import game
+import deco
 
 class MainMenuSurface(object):
     def __init__(self, game, *args, **kwargs):
@@ -19,15 +21,16 @@ class MainMenuSurface(object):
             # ID : Height
         }
 
-        self.SECRET_PHRASE = [] # Will load secret phrase characters into here
+        self.SECRET_PHRASE = []
 
         self.logo = pygame.image.load(
             './assets/logo.png'
         ).convert()
 
+        self.game.SoundHandle.play_music('bouncy boi', loop=True)
+
     def event_hook(self, event):
         if event.type == pygame.KEYDOWN:
-            print(pygame.key.name(event.key))
             if event.key == pygame.K_DOWN:
                 self.POINTER_INDEX += 1 if self.POINTER_INDEX+1 < len(self.LIST_MENU_OPTIONS) else 0
                 self.game.SoundHandle.attempt_play('menuswitch')
@@ -39,8 +42,26 @@ class MainMenuSurface(object):
                 self.game.SoundHandle.attempt_play('menuselectdrastic')
                 
                 self.game.WindowHandle.do_with_fade(
-                    list(self.LIST_MENU_OPTIONS.values())[self.POINTER_INDEX]()
+                    list(self.LIST_MENU_OPTIONS.values())[self.POINTER_INDEX]
                 )
+
+            self.SECRET_PHRASE.append(pygame.key.name(event.key))
+
+            if len(self.SECRET_PHRASE) > 3:
+                self.SECRET_PHRASE.pop(0)
+
+            if self.SECRET_PHRASE == list('pog'):
+                self.logo = pygame.image.load(
+                    './assets/pog.jpg'
+                ).convert()
+                self.logo = pygame.transform.scale(
+                    self.logo, (100, 100)
+                )
+
+
+    @deco.FUNC_EVENT_LISTENER('music_play')
+    def music_was_played_wow(self):
+        print('WOWIE')
 
     def load_game_screen(self):
         print("not implemented yet again")
