@@ -1,3 +1,6 @@
-fps-limit: 200  # This value should be pretty straight-forward unless you're a caveman. Setting to `null` = No limit
-fps-display: true # Shows a little FPS counter at the top of the screen, in case you're into that, ironically it lowers fps slightly
-ram-display: true
+fps-limit: 120  # This value should be pretty straight-forward unless you're a caveman. Setting to `null` = No limit.
+fps-display: false # Shows a little FPS counter at the top of the screen, in case you're into that, ironically it lowers fps slightly.
+ram-display: false # Shows how many MB of ram the python process is using.
+disabled-extensions: # A list of all of the disabled extensions, not to be loaded on startup.
+  - none
+console-debug-logs: true # When the console is open, this will show verbose information logs, usually only for development.

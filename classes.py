@@ -1,4 +1,5 @@
 import enums
+import json
 
 # Dungeon Generator Helper Functions
 # (I know these aren't classes, but their easier to implement as standalone functions)
@@ -20,13 +21,32 @@ class DungeonGenerator(object):
         self.HALLWAY_GENERATOR = DungeonHallwayGenerator()
         self.DUNGEON_MAPPING = generate_void_dungeon_map(width, height)
 
+class FileDungeonGenerator(DungeonGenerator):
+    def __init__(self, game, *args, **kwargs):
+        super().__init__(
+            game, *args, **kwargs
+        )
+        self.RAW_MAP_DATA = {}
+
+    @property
+    def DUNGEON_MAPPING(self):
+        if 'mapping' in self.RAW_MAP_DATA.keys():
+            return self.RAW_MAP_DATA['mapping']
+        else:
+            return None
+
+    def load_from_file(self, path : str):
+        with open(path, 'r') as dfile:
+            self.RAW_MAP_DATA = json.load(dfile)
+        return
+
 class DungeonRoomMap(object):
     def __init__(self, array : list = [], *args, **kwargs):
         self._mapping = array
         self.overlapping_rooms = []
 
     def overlap_room(self, room):
-        
+        pass
 
     @property
     def map_width(self):
@@ -39,6 +59,13 @@ class DungeonRoomMap(object):
     def map_height(self):
         return len(self._mapping)
 
+    @property
+    def map_area(self):
+        if self.map_width != 0:
+            return sum([len(c) for c in self._mapping])
+        raise ValueError("Map is Empty")
+
+
     def check_for_interference(self, other : DungeonRoom):
         interference_value = 0
         for ri, row in enumerate(other.map._mapping, start=other.pos_x):
@@ -47,7 +74,8 @@ class DungeonRoomMap(object):
                     interference_value += 1
         return interference_value
 
-    def make_wall(self, a, b, hollow : bool = True):
+    # Creates a hollow box, filled in boxes are currently not supported
+    def make_box(self, a, b, hollow : bool = True):
         if any([len(x) != 2 for x in (a, b)]):
             raise ValueError("Not valid thingy")
 
@@ -73,6 +101,14 @@ class DungeonRoomMap(object):
                         if colindex == a[0] or colindex == b[0]:
                             new_row[colindex] = enums.DungeonTiles.wall
             return self
+
+    # Places a singular wall
+    def place_wall(self, x, y):
+        self._mapping[y][x] = enums.DungeonTiles.wall
+
+    # Does the exact same thing as above, but places a custom defined tile.
+    def place_tile(self, x, y, dungeonTile : enums.DungeonTiles):
+        self._mapping[y][x] = dungeonTile 
 
 class DungeonHallwayGenerator(object):
     def __init__(self, *args, **kwargs):

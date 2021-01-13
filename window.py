@@ -1,7 +1,7 @@
 import pygame
 from utility import boop
 from enums import GameState
-import surfaces
+from surfaces import gamesurface, startmenu
 import time
 
 class WindowHandler(object):
@@ -25,8 +25,8 @@ class WindowHandler(object):
         self.FADE.set_alpha(0) # Initially transparent
 
     def cache_surfaces(self):
-        self.SURFACE_CACHE['menu'] = surfaces.MainMenuSurface(self.game)
-        self.SURFACE_CACHE['game'] = surfaces.GameSurface(self.game)
+        self.SURFACE_CACHE['menu'] = startmenu.MainMenuSurface(self.game)
+        self.SURFACE_CACHE['game'] = gamesurface.GameSurface(self.game)
 
     def draw_background(self):
         self.screen.fill(

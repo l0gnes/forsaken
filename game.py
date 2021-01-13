@@ -4,6 +4,7 @@ from utility import sethand, exthand, boop
 import importlib
 import glob
 import os
+import functools
 
 # We're going to try to use logging now :)
 import logging
@@ -40,6 +41,8 @@ class GameHandler(object):
         }
 
         self.DUNGEON_SIZE = enums.DungeonRoomSize.medium # TODO: Allow users to change this at some point?
+        self.EVENT_NOTIFIERS = dict()
+        self.EVENT_LISTENERS = dict()
     
     def init_logging(self):
         L = logging.getLogger(__name__)
