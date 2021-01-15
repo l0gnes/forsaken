@@ -57,6 +57,7 @@ class PlayerObject(pygame.sprite.Sprite):
         self.SPECIES = random.choice(enums.PlayerSpecies.__members__.values())
         self.CLASS = random.choice(enums.PlayerClasses.__members__.values())
         self.PERK = random.choice(enums.PlayerBoosts.__members__.values())
+        
         self.INVENTORY = inventory.InventoryHandler(self)
         self.EQUIPS = EquipmentManager(self)
 
