@@ -11,7 +11,7 @@ class DungeonRoomSize(Enum):
     medium = 2
     large = 3
     massive = 4
-    
+
     def get_size(self):
         if self.value == 0: # IF TINY
             return 32, 32
@@ -33,3 +33,36 @@ class DungeonTiles(Enum):
 
     # TODO: Implement Doors
     door = 2
+
+class PlayerEquipType(Enum):
+    unknown = 0
+    helmet = 1
+    chestplate = 2
+    leggings = 3
+    boots = 4
+
+    # TODO: Implement Later
+    ring = 5
+    amulet = 6
+
+class PlayerSpecies(Enum):
+    human = 0
+    elf = 1
+    orc = 2
+
+class PlayerClasses(Enum):
+    warrior = 0
+    ranger = 1
+    mage = 2
+
+    @property
+    def can_cast_magic(self):
+        # Add the ids of the classes which can cast magic
+        return self.value in (2,)
+
+class PlayerBoosts(self):
+    none = 0
+    attack = 1
+    defence = 2
+    accuracy = 3
+    criticals = 4
