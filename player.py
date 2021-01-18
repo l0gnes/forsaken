@@ -47,19 +47,26 @@ class PlayerObject(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.height, self.width = PLAYER_SIZE
-        self.image = pygame.Surface((self.height, self.width))
-        self.image.fill('red') # TODO: Do something about this
 
+        self.image = self.fetch_character_icon()
         self.rect = self.image.get_rect()
 
         self.experience = 0
+        self.damage_taken = 0
 
         self.SPECIES = random.choice(enums.PlayerSpecies.__members__.values())
         self.CLASS = random.choice(enums.PlayerClasses.__members__.values())
         self.PERK = random.choice(enums.PlayerBoosts.__members__.values())
-        
+
+        self.BASE_CARRY_WEIGHT = 175
+
         self.INVENTORY = inventory.InventoryHandler(self)
         self.EQUIPS = EquipmentManager(self)
+
+    def fetch_character_icon(self):
+        i = pygame.Surface((self.height, self.width))
+        i.fill('red')
+        return i
 
     def add_experience(self, c):
         self.experience += round(c)
@@ -71,7 +78,19 @@ class PlayerObject(pygame.sprite.Sprite):
         return h2h
 
     @property
+    def free_carry_weight(self):
+        return self.BASE_CARRY_WEIGHT - self.INVENTORY.fetch_storage_weight()
+
+    @property
+    def dead(self):
+        return self.damage_taken == self.total_health
+
+    @property
     def health(self):
+        return self.total_health - self.damage_taken
+
+    @property
+    def total_health(self):
         return 20 * (5 * self.level) + self.EQUIPS.get_health_benefits()
 
     @property

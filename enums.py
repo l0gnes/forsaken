@@ -34,16 +34,23 @@ class DungeonTiles(Enum):
     # TODO: Implement Doors
     door = 2
 
-class PlayerEquipType(Enum):
+class itemType(Enum):
     unknown = 0
-    helmet = 1
-    chestplate = 2
-    leggings = 3
-    boots = 4
+    consumable = 1
+    bauble = 2
+    trinket = 3
+    gem = 4
 
-    # TODO: Implement Later
-    ring = 5
-    amulet = 6
+    class PlayerEquipType(Enum):
+        unknown = 0
+        helmet = 1
+        chestplate = 2
+        leggings = 3
+        boots = 4
+
+        # TODO: Implement Later
+        ring = 5
+        amulet = 6
 
 class PlayerSpecies(Enum):
     human = 0
