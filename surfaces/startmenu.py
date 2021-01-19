@@ -1,6 +1,8 @@
 import pygame
+import pygame.gfxdraw
 import game
 import deco
+import os
 
 class MainMenuSurface(object):
     def __init__(self, game, *args, **kwargs):
@@ -22,10 +24,13 @@ class MainMenuSurface(object):
         }
 
         self.SECRET_PHRASE = []
+        self.MENU_CUSTOM_TITLE_FONT = pygame.font.Font("./assets/pixellife.TTF", 56)
 
         self.logo = pygame.image.load(
             './assets/logo.png'
         ).convert()
+
+        self.background = pygame.image.load(os.path.join('assets', 'placeholder-backdrop.png')).convert()
 
         #self.game.SoundHandle.play_music('bouncy boi', loop=True)
 
@@ -75,8 +80,8 @@ class MainMenuSurface(object):
             sur = self.game.LARGE_FONT.render(
                 o, # Text,
                 True, # Antialias
-                "black", # Color of text
-                'white' if self.POINTER_INDEX != index else 'grey'
+                "grey", # Color of text
+                None if self.POINTER_INDEX != index else pygame.color.Color(30, 30, 30, a=70)
             )
             text_labels.append(sur)
 
@@ -87,7 +92,7 @@ class MainMenuSurface(object):
                 longest_width = label.get_width()
 
             if label.get_height() > tallest_height:
-                tallest_height = label.get_height()
+                tallest_height = label.get_height() + 4
 
         total_height = tallest_height * len(text_labels) + (8 * len(text_labels))
         total_width = longest_width + 8
@@ -96,10 +101,11 @@ class MainMenuSurface(object):
             (
                 total_width,
                 total_height
-            )
+            ),
+            pygame.SRCALPHA
         )
 
-        menu_surface.fill('white')
+        #menu_surface.fill(pygame.Color(0, 0, 0, a=255))
         for index, o in enumerate(text_labels, start=0):
             h = index * tallest_height + 8
             self.LIST_MENU_POINT_POSITIONS[index] = h
@@ -114,11 +120,49 @@ class MainMenuSurface(object):
         self.surface.fill(
             'white'
         )
+
         self.surface.blit(
-            self.logo,
+            pygame.transform.scale(
+                self.background,
+                (self.surface.get_width(), self.surface.get_height())
+            ),
+            (0, 0)
+        )
+
+        #self.surface.blit(
+        #    self.logo,
+        #    (
+        #        (self.surface.get_width() - self.logo.get_width()) / 2,
+        #        (self.surface.get_height() - self.logo.get_height()) / 10
+        #    )
+        #)
+
+        olSur = pygame.Surface(
             (
-                (self.surface.get_width() - self.logo.get_width()) / 2,
-                (self.surface.get_height() - self.logo.get_height()) / 10
+                self.surface.get_width(),
+                self.surface.get_height()
+            ),
+            pygame.SRCALPHA
+        )
+        
+        pygame.gfxdraw.filled_trigon(
+            olSur,
+            0, -100, round(self.surface.get_width() / 2), self.surface.get_height(), 0, self.surface.get_height(), pygame.color.Color(30, 30, 30)
+        )
+
+        olSur.set_alpha(120)
+
+        self.surface.blit(olSur, (0, 0))
+        
+
+        x=self.MENU_CUSTOM_TITLE_FONT.render(
+                'FORSAKEN', True, 'white'
+        )
+        self.surface.blit(
+            x,
+            (
+                (self.surface.get_width() - x.get_width()) / 4,
+                (self.surface.get_height() - x.get_height()) / 7
             )
         )
 
@@ -126,7 +170,7 @@ class MainMenuSurface(object):
         self.surface.blit(
             sml,
             (
-                (self.surface.get_width() - sml.get_width()) / 2,
+                (self.surface.get_width() - sml.get_width()) / 4,
                 (self.surface.get_height() - sml.get_height()) / 2
             )
         )

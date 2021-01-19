@@ -1,5 +1,5 @@
 import pygame
-import events, window, player, enums, sound, deco
+import events, window, player, enums, sound, deco, animations
 from utility import sethand, exthand, boop
 import importlib
 import glob
@@ -99,6 +99,7 @@ class GameHandler(object):
         self.EventHandle = events.EventHandler(self)
         self.SoundHandle = sound.SoundHandler(self)
         self.WindowHandle = window.WindowHandler(self)
+        self.AnimationHandler = animations.AnimationHandler(self)
 
         self.ExtensionHandler = exthand.ExtensionHandler(self)
         #self.spawn_player()
