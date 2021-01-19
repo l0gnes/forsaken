@@ -5,6 +5,6 @@ This is open-source so I can hand it in easily and so that in the future, if peo
 
 If you would like to see a list of tests/struggles for further proof that I probably did this, [refer here](https://github.com/boopdev/pygame-learning)
 
-Sound Effects made with [SFXIA](https://rxi.itch.io/sfxia)
-
-Music made with [Bosca Ceoil](https://boscaceoil.net/)
+- Sound Effects made with [SFXIA](https://rxi.itch.io/sfxia)
+- Music made with [Bosca Ceoil](https://boscaceoil.net/)
+- **Extra credits for assets can be found in the assets folder.**
