@@ -21,9 +21,11 @@ def FUNC_EVENT_CALLER(func):
 def FUNC_EVENT_LISTENER(listener_type : str):
 
     def wrapper(f):
-        print(f.__class__)
+        print(f, listener_type, sep='\t')
+        
         @functools.wraps(f)
         def event_listener_deco(self, *args, **kwargs):
+            print(f)
 
             if listener_type not in self.game.EVENT_LISTENERS.keys():
                 self.game.EVENT_LISTENERS[listener_type] = (f,) # We add this in there just incase the event hasnt happened yet

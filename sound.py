@@ -50,6 +50,10 @@ class SoundHandler(object):
             self.SOUNDS[refname] = pygame.mixer.Sound(file=i)
             self.game.LOGGING.debug("Music File %s Loaded!" % refname)
 
+    @deco.FUNC_EVENT_LISTENER('setGamestate')
+    def play_menu_stuff(self):
+        self.attempt_play(self, 'bouncy boi')
+
     @deco.FUNC_EVENT_CALLER('sound_play')
     def attempt_play(self, soundref, *args, **kwargs):
         self.game.LOGGING.debug("Attempting to play a sound \"%s\"" % soundref)

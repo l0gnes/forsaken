@@ -1,4 +1,5 @@
 import pygame
+from mcm import MovingCameraManager
 
 class GameSurface(object):
     def __init__(self, game, *args, **kwargs):
@@ -8,6 +9,8 @@ class GameSurface(object):
             size = self.game.screen.get_size()
         )
 
+        self.mcm = MovingCameraManager(self.game, self.SURFACE)
+        
     def draw_surface(self):
         self.SURFACE.fill(
             'red'

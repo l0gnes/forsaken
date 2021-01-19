@@ -21,7 +21,7 @@ class MovingCameraManager(object):
     def render_character(self, char):
         # Call this post-render_bottom_level_mapping
         self.game.ACTIVE_SURFACE.SURFACE.blit(
-            char,
+            self.game.fetch_player(),
             (
                 char.x - self.offset_x,
                 char.y - self.offset_y

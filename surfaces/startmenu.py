@@ -27,7 +27,7 @@ class MainMenuSurface(object):
             './assets/logo.png'
         ).convert()
 
-        self.game.SoundHandle.play_music('bouncy boi', loop=True)
+        #self.game.SoundHandle.play_music('bouncy boi', loop=True)
 
     def event_hook(self, event):
         if event.type == pygame.KEYDOWN:

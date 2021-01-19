@@ -1,7 +1,7 @@
 import pygame
 from utility import boop
 from enums import GameState
-from surfaces import gamesurface, startmenu
+from surfaces import gamesurface, startmenu, loadingscreen
 import time
 
 class WindowHandler(object):
@@ -24,9 +24,12 @@ class WindowHandler(object):
         self.FADE.fill('black') # Fill Color = Black because yes
         self.FADE.set_alpha(0) # Initially transparent
 
+        self.do_init_stuff()
+
     def cache_surfaces(self):
         self.SURFACE_CACHE['menu'] = startmenu.MainMenuSurface(self.game)
         self.SURFACE_CACHE['game'] = gamesurface.GameSurface(self.game)
+        self.SURFACE_CACHE['loading'] = loadingscreen.LoadingScreen(self.game)
 
     def draw_background(self):
         self.screen.fill(
@@ -54,6 +57,9 @@ class WindowHandler(object):
 
         elif self.game.GAMESTATE == GameState.playing:
             self.ACTIVE_SURFACE = self.SURFACE_CACHE['game']
+
+        elif self.game.GAMESTATE == GameState.loading:
+            self.ACTIVE_SURFACE = self.SURFACE_CACHE['loading']
 
     def draw_fade_effects(self):
         self.screen.blit(self.FADE, (0, 0))
