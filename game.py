@@ -49,7 +49,7 @@ class GameHandler(object):
         self.EVENT_LISTENERS = dict()
 
         self.EVENT_NOTIFIERS[self.setGamestate.__name__] = self.setGamestate
-    
+
     def init_logging(self):
         L = logging.getLogger(__name__)
         L.setLevel(
@@ -110,11 +110,11 @@ class GameHandler(object):
 
         # Extensions stuff
         self.ExtensionHandler.init()
-        
+
         self.LOGGING.info("Game is now running!")
         self.GAMESTATE = enums.GameState.menu_screen
         while self.RUNNING:
             self.EventHandle.handle_events()
+            self.AnimationHandler.do_animations()
             self.WindowHandle.draw_all()
             self.Ticker.ctick()
-
