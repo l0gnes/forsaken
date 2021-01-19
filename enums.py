@@ -67,7 +67,7 @@ class PlayerClasses(Enum):
         # Add the ids of the classes which can cast magic
         return self.value in (2,)
 
-class PlayerBoosts(self):
+class PlayerBoosts(Enum):
     none = 0
     attack = 1
     defence = 2
