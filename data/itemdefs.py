@@ -1,6 +1,18 @@
-from inventory import ItemDefinition
+#from inventory import ItemDefinition
 from enums import itemType
 from data import itemFuncs
+
+class ItemDefinition(object):
+    def __init__(self, *args, **kwargs):
+        self.weight = kwargs.get("weight", 0)
+        self.name = kwargs.get("name", "An unknown item")
+        self.description = kwargs.get('description', "Its use is indiscribable")
+        self.type = itemType.unknown
+        self.FUNCTION = None
+        self.subclass = None
+
+        if self.subclass is not None:
+            self.subclass.__init__()
 
 itemlist = [
     ItemDefinition(

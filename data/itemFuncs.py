@@ -1,4 +1,4 @@
-from inventory import ItemDefinition
+#from inventory import ItemDefinition
 from enums import itemType
 
 class ItemFunction(object):
@@ -11,4 +11,4 @@ class HealingConsumable(ItemFunction):
         self.FUNCTION = self.heal_player
 
     def heal_player(self, player, *args, **kwargs):
-        return self.player.heal(self.health_to_heal)
+        return player.heal(self.health_to_heal)

@@ -1,26 +1,14 @@
 import pygame
 import enums
-import itemdefs
+from data import itemdefs
 
 class playerEncumbered(Exception):
     pass
 
 # Weight is measured in "lb"
 
-class ItemDefinition(object):
-    def __init__(self, *args, **kwargs):
-        self.weight = kwargs.get("weight", 0)
-        self.name = kwargs.get("name", "An unknown item")
-        self.description = kwargs.get('description', "Its use is indiscribable")
-        self.type = enum.itemType.unknown
-        self.FUNCTION = None
-        self.subclass = None
-
-        if self.subclass is not None:
-            self.subclass.__init__()
-
 class ItemObject(object):
-    def __init__(self, id : int, itemDef : ItemDefinition):
+    def __init__(self, id : int, itemDef : itemdefs.ItemDefinition):
         self.id = id
         self.meta = itemDef
         #self.FUNCTION = self.meta.FUNCTION
@@ -38,7 +26,7 @@ class ItemFactory(object):
 
         for idef in self.itemdefs:
             self.item_object_cache.append(
-                ItemObject.__init__(len(self.item_object_cache), idef)
+                ItemObject.__init__(id=len(self.item_object_cache), itemDef=idef)
             )
 
         return self.item_object_cache
