@@ -1,9 +1,19 @@
+import sys, os
+
+x = os.path.split(__file__)[0]
+sys.path.extend(
+    (
+        x,
+        x + "\\utility"
+    )
+)
+
 import pygame
 import queue
 from utility import boop, sethand
 from stuff import models
 import time
-import sys, os
+
 
 import events, window, game
 
@@ -12,7 +22,8 @@ __verison__ = "Alpha v0.3"
 if __name__ == "__main__":
     # Adding a dummy driver for the PI
     #os.environ['SDL_VIDEODRIVER'] = 'dummy'
-    
+
+
     global SETTINGS
     global WindowHandle
     SETTINGS = sethand.load_settings_file(create_if_not_exists=True)

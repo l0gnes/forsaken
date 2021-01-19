@@ -42,8 +42,9 @@ class EquipmentManager(object):
         )
 
 class PlayerObject(pygame.sprite.Sprite):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, game, *args, **kwargs):
         # Init base class
+        self.GAME = game # No idea why you'd ever need this but here it is
         pygame.sprite.Sprite.__init__(self)
 
         self.height, self.width = PLAYER_SIZE

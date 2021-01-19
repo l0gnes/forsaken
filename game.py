@@ -46,7 +46,8 @@ class GameHandler(object):
         self.EVENT_NOTIFIERS = dict()
         self.EVENT_LISTENERS = dict()
 
-        self.addEventNotifier(self.setGamestate)
+        self.addEventNotifier(self.setGamestate, "gamestateChanged")
+        self.addEventNotifier(self.start_new_game, "gameStarted")
 
     def init_logging(self):
         L = logging.getLogger(__name__)
