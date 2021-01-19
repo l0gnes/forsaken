@@ -15,6 +15,10 @@ from surfaces.loadingscreen import LoadingScreen
 
 # Using this file to keep all of the game data organized
 
+# Some Important Game Constants
+# PLAYER = The character the user is
+# game.GAMESTATE = Game State
+
 class GameHandler(object):
     def __init__(self, screen, settings):
 
@@ -44,7 +48,7 @@ class GameHandler(object):
         self.EVENT_NOTIFIERS = dict()
         self.EVENT_LISTENERS = dict()
 
-        self.addEventNotifier(self.setGamestate)
+        self.EVENT_NOTIFIERS[self.setGamestate.__name__] = self.setGamestate
 
     def init_logging(self):
         L = logging.getLogger(__name__)
@@ -53,8 +57,8 @@ class GameHandler(object):
         )
         return L
 
-    def addEventNotifier(self, func, custom_name : str = None):
-        self.EVENT_NOTIFIERS[func.__name__ if custom_name is None else custom_name] = func
+    def addEventNotifier(self, func):
+        self.EVENT_NOTIFIERS[func.__name__] = func
         return func.__name__
 
     def addEventListener(self, funcname, func):
@@ -98,6 +102,11 @@ class GameHandler(object):
         self.AnimationHandler = animations.AnimationHandler(self)
 
         self.ExtensionHandler = exthand.ExtensionHandler(self)
+        #self.spawn_player()
+
+        # Initialization Stuff
+        # This function is supposed to only be called once to add things to caches
+        #self.WindowHandle.do_init_stuff()
 
         # Extensions stuff
         self.ExtensionHandler.init()
