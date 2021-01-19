@@ -18,7 +18,7 @@ class WindowHandler(object):
 
         self.BACKGROUND_COLOR = pygame.Color('black')
         self.SURFACE_CACHE = {}
-        self.ACTIVE_SURFACE = None
+        self.ACTIVE_SURFACE = loadingscreen.LoadingScreen(self.game)
 
         self.FADE = pygame.Surface(size = self.screen.get_size())
         self.FADE.fill('black') # Fill Color = Black because yes

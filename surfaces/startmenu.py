@@ -32,6 +32,7 @@ class MainMenuSurface(object):
 
         self.background = pygame.image.load(os.path.join('assets', 'placeholder-backdrop.png')).convert()
 
+        #self.game.addEventListener('setGamestate', self.music_was_played_wow)
         #self.game.SoundHandle.play_music('bouncy boi', loop=True)
 
     def event_hook(self, event):
@@ -59,11 +60,6 @@ class MainMenuSurface(object):
                 self.background = pygame.image.load(
                     './assets/pog.jpg'
                 ).convert()
-
-
-    @deco.FUNC_EVENT_LISTENER('music_play')
-    def music_was_played_wow(self):
-        print('WOWIE')
 
     def load_game_screen(self):
         print("not implemented yet again")

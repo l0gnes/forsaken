@@ -46,8 +46,8 @@ class GameHandler(object):
         self.EVENT_NOTIFIERS = dict()
         self.EVENT_LISTENERS = dict()
 
-        self.addEventNotifier(self.setGamestate, "gamestateChanged")
-        self.addEventNotifier(self.start_new_game, "gameStarted")
+        self.addEventNotifier(self.setGamestate)
+        self.addEventNotifier(self.start_new_game)
 
     def init_logging(self):
         L = logging.getLogger(__name__)
@@ -67,17 +67,13 @@ class GameHandler(object):
             self.EVENT_LISTENERS[funcname] = [func,]
         return funcname
 
+    @deco.FUNC_EVENT_CALLER("setGamestate")
     def setGamestate(self, g: enums.GameState):
         self.GAMESTATE = g
 
+    @deco.FUNC_EVENT_CALLER("start_new_game")
     def start_new_game(self):
         self.GAMESTATE = enums.GameState.playing
-
-    def spawn_player(self):
-        self.LOGGING.debug("Spawning Player Object")
-
-        ply = player.PlayerObject()
-        self.ENTITY_CACHE.push_important('PLAYER', ply)
 
     # Quick function to get player object
     def fetch_player(self):
@@ -103,10 +99,12 @@ class GameHandler(object):
         self.ExtensionHandler = exthand.ExtensionHandler(self)
 
         # Extensions stuff
+        print(self.SoundHandle.SOUNDS)
         self.ExtensionHandler.init()
 
         self.LOGGING.info("Game is now running!")
-        self.GAMESTATE = enums.GameState.menu_screen
+        self.GAMESTATE = self.setGamestate(enums.GameState.menu_screen)
+        self.WindowHandle.ACTIVE_SURFACE = self.WindowHandle.SURFACE_CACHE['menu']
         while self.RUNNING:
             self.EventHandle.handle_events()
             self.AnimationHandler.do_animations()
