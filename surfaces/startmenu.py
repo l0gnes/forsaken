@@ -56,12 +56,9 @@ class MainMenuSurface(object):
                 self.SECRET_PHRASE.pop(0)
 
             if self.SECRET_PHRASE == list('pog'):
-                self.logo = pygame.image.load(
+                self.background = pygame.image.load(
                     './assets/pog.jpg'
                 ).convert()
-                self.logo = pygame.transform.scale(
-                    self.logo, (100, 100)
-                )
 
 
     @deco.FUNC_EVENT_LISTENER('music_play')
