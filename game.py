@@ -15,6 +15,8 @@ from surfaces.loadingscreen import LoadingScreen
 
 # Using this file to keep all of the game data organized
 
+#BANANA
+
 class GameHandler(object):
     def __init__(self, screen, settings):
 
