@@ -4,6 +4,7 @@ class GameState(Enum):
     playing = 0 # Shown if the game is active
     menu_screen = 1 # Shown if you're on the main menu screen
     paused = 2 # Shown if game is in a paused state
+    loading = 3 # When the game is initially loading
 
 class DungeonRoomSize(Enum):
     tiny = 0
