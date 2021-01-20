@@ -4,7 +4,9 @@ x = os.path.split(__file__)[0]
 sys.path.extend(
     (
         x,
-        x + "\\utility"
+        x + "\\utility",
+        x + "\\extensions",
+        x + "\\assets"
     )
 )
 

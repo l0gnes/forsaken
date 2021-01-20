@@ -8,7 +8,7 @@ PLAYER_SIZE = (16, 16)
 
 class EquipmentManager(object):
     def __init__(self, player):
-        self.PLAYER = PLAYER
+        self.PLAYER = player
 
         self.EQUIPS = {}
 
@@ -55,18 +55,23 @@ class PlayerObject(pygame.sprite.Sprite):
         self.experience = 0
         self.damage_taken = 0
 
-        self.SPECIES = random.choice(enums.PlayerSpecies.__members__.values())
-        self.CLASS = random.choice(enums.PlayerClasses.__members__.values())
-        self.PERK = random.choice(enums.PlayerBoosts.__members__.values())
+        self.SPECIES = random.choice(list(enums.PlayerSpecies.__members__.values()))
+        self.CLASS = random.choice(list(enums.PlayerClasses.__members__.values()))
+        self.PERK = random.choice(list(enums.PlayerBoosts.__members__.values()))
 
         self.BASE_CARRY_WEIGHT = 175
 
         self.INVENTORY = inventory.InventoryHandler(self)
         self.EQUIPS = EquipmentManager(self)
 
+    def draw_entity(self, screen):
+        screen.blit(self.image, (self.location))
+
+
     def fetch_character_icon(self):
         i = pygame.Surface((self.height, self.width))
         i.fill('red')
+        self.image = i
         return i
 
     def add_experience(self, c):

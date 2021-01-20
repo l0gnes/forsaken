@@ -26,7 +26,7 @@ class ItemFactory(object):
 
         for idef in self.itemdefs:
             self.item_object_cache.append(
-                ItemObject.__init__(id=len(self.item_object_cache), itemDef=idef)
+                ItemObject(id=len(self.item_object_cache), itemDef=idef)
             )
 
         return self.item_object_cache

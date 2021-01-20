@@ -7,7 +7,7 @@ import os
 class MainMenuSurface(object):
     def __init__(self, game, *args, **kwargs):
         self.game = game # reference to game object
-        
+
         self.surface = pygame.Surface(
             size = self.game.screen.get_size()
         )
@@ -25,15 +25,13 @@ class MainMenuSurface(object):
 
         self.SECRET_PHRASE = []
         self.MENU_CUSTOM_TITLE_FONT = pygame.font.Font("./assets/pixellife.TTF", 56)
+        self.TITLE = "FORSAKEN"
 
         self.logo = pygame.image.load(
             './assets/logo.png'
         ).convert()
 
         self.background = pygame.image.load(os.path.join('assets', 'placeholder-backdrop.png')).convert()
-
-        #self.game.addEventListener('setGamestate', self.music_was_played_wow)
-        #self.game.SoundHandle.play_music('bouncy boi', loop=True)
 
     def event_hook(self, event):
         if event.type == pygame.KEYDOWN:
@@ -46,7 +44,7 @@ class MainMenuSurface(object):
             elif event.key == pygame.K_RETURN:
                 # TODO: Make the text in the menu flash or something i don't know
                 self.game.SoundHandle.attempt_play('menuselectdrastic')
-                
+
                 self.game.WindowHandle.do_with_fade(
                     list(self.LIST_MENU_OPTIONS.values())[self.POINTER_INDEX]
                 )
@@ -60,6 +58,7 @@ class MainMenuSurface(object):
                 self.background = pygame.image.load(
                     './assets/pog.jpg'
                 ).convert()
+                self.TITLE = "POGGERS BRO"
 
     def load_game_screen(self):
         print("not implemented yet again")
@@ -122,14 +121,6 @@ class MainMenuSurface(object):
             (0, 0)
         )
 
-        #self.surface.blit(
-        #    self.logo,
-        #    (
-        #        (self.surface.get_width() - self.logo.get_width()) / 2,
-        #        (self.surface.get_height() - self.logo.get_height()) / 10
-        #    )
-        #)
-
         olSur = pygame.Surface(
             (
                 self.surface.get_width(),
@@ -137,7 +128,7 @@ class MainMenuSurface(object):
             ),
             pygame.SRCALPHA
         )
-        
+
         pygame.gfxdraw.filled_trigon(
             olSur,
             0, -100, round(self.surface.get_width() / 2), self.surface.get_height(), 0, self.surface.get_height(), pygame.color.Color(30, 30, 30)
@@ -146,10 +137,10 @@ class MainMenuSurface(object):
         olSur.set_alpha(120)
 
         self.surface.blit(olSur, (0, 0))
-        
+
 
         x=self.MENU_CUSTOM_TITLE_FONT.render(
-                'FORSAKEN', True, 'white'
+                self.TITLE, True, 'white'
         )
         self.surface.blit(
             x,
@@ -169,4 +160,3 @@ class MainMenuSurface(object):
         )
 
         self.game.screen.blit(self.surface, (0, 0))
-

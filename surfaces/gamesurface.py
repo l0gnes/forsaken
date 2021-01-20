@@ -1,5 +1,7 @@
 import pygame
 from mcm import MovingCameraManager
+import player
+import monsters
 
 class GameSurface(object):
     def __init__(self, game, *args, **kwargs):
@@ -10,24 +12,33 @@ class GameSurface(object):
         )
 
         self.mcm = MovingCameraManager(self.game, self.SURFACE)
-        
+        self.game.ENTITY_CACHE.push_important("PLAYER", player.PlayerObject(self.game))
+        self.game.ENTITY_CACHE.push_unsorted(monsters.Monster())
+
+
+
+    def event_hook(self, event):
+        #print()
+        if event.type == pygame.KEYDOWN:
+            print(event)
+            if event.key == pygame.K_DOWN:
+                self.game.fetch_player().move(0, 16)
+            elif event.key == pygame.K_UP:
+                self.game.fetch_player().move(0, -16)
+            elif event.key == pygame.K_LEFT:
+                self.game.fetch_player().move(-16, 0)
+            elif event.key == pygame.K_RIGHT:
+                self.game.fetch_player().move(16, 0)
+
+
     def draw_surface(self):
         self.SURFACE.fill(
-            'red'
+            'purple'
         )
 
-        sur = self.game.LARGE_FONT.render(
-            "FUCK YOU",
-            True,
-            'black'
-        )
 
-        self.SURFACE.blit(
-            sur,
-            (
-                (self.SURFACE.get_width() - sur.get_width()) / 2,
-                (self.SURFACE.get_height() - sur.get_height()) / 2,
-            )
-        )
 
+
+        self.game.ENTITY_CACHE.draw_all_entities(self.SURFACE)
+        #self.mcm.render_bottom_level_mapping(self.SURFACE)
         self.game.screen.blit(self.SURFACE, (0, 0))

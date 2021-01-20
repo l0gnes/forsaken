@@ -8,7 +8,7 @@ def draw_fps_counter(screen, clock):
         pygame.font.init()
 
     fp = pygame.font.get_default_font() # Gets system font
-    font = pygame.font.Font(fp, 16) 
+    font = pygame.font.Font(fp, 16)
 
     # Creates a new surface
     f = clock.get_fps()
@@ -28,10 +28,10 @@ def draw_mem_counter(screen):
         pygame.font.init()
 
     fp = pygame.font.get_default_font() # Gets system font
-    font = pygame.font.Font(fp, 12) 
+    font = pygame.font.Font(fp, 12)
 
     # Creates a new surface
-    
+
     process = psutil.Process(os.getpid())
     ram = process.memory_info().rss / 1024 ** 2
 
@@ -53,7 +53,7 @@ class EnumeratingTicker():
         self._clock = pygame.time.Clock()
 
         self.scheduled_events = {}
-        
+
 
     def ctick(self):
         self.current_tick = self.current_tick + 1 if self.current_tick < self.maxtick else 0
@@ -66,7 +66,7 @@ class EnumeratingTicker():
 class EntityResponse(object):
     def __init__(self, entity_cache, entityid, entityobject, isimportant : bool = True):
         self.entity_cache = entity_cache
-        
+
         self.id = entityid
         self.entity = entityobject
         self.isimportant = self.isimportant
@@ -102,7 +102,7 @@ class EntityCache(object):
 
     def push_unsorted(self, value):
         self.unsorted[str(hex(len(self.unsorted)))] = value
-    
+
     def pull_important(self, key : str):
         if key not in self.important.keys():
             return None
@@ -118,13 +118,17 @@ class EntityCache(object):
     def __iter__(self):
         self._n = 0
         return self
-    
+
+    def draw_all_entities(self, screen):
+        for i in self.all_entities.values():
+            if hasattr(i, 'draw_entity'):
+                i.draw_entity(screen)
+            else:
+                print(f"Entity of class ``{i.__class__.__name__}`` has no draw_entity() func")
+
     def __next__(self):
         if self._n < len(self):
             self._n += 1
             return tuple(self.all_entities.values())[self._n-1]
         else:
             raise StopIteration
-
-
-
