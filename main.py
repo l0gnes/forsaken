@@ -31,7 +31,7 @@ if __name__ == "__main__":
     SETTINGS = sethand.load_settings_file(create_if_not_exists=True)
 
     pygame.display.set_caption("Forsaken")
-    screen = pygame.display.set_mode((512, 512), 0, 32)
+    screen = pygame.display.set_mode((960, 800), 0, 32)
     pygame.init()
     pygame.display.init()
     pygame.font.init()

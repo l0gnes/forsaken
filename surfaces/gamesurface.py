@@ -2,6 +2,7 @@ import pygame
 from mcm import MovingCameraManager
 import player
 import monsters
+import dungeons
 
 class GameSurface(object):
     def __init__(self, game, *args, **kwargs):
@@ -13,7 +14,10 @@ class GameSurface(object):
 
         self.mcm = MovingCameraManager(self.game, self.SURFACE)
         self.game.ENTITY_CACHE.push_important("PLAYER", player.PlayerObject(self.game))
-        self.game.ENTITY_CACHE.push_unsorted(monsters.Monster())
+
+        self.DUNGEON_GEN = dungeons.FileDungeonGenerator(self.game)
+        self.DUNGEON_MAP = self.DUNGEON_GEN.load_from_file('maptest.json')
+        self.DUNGEON_MAP.print_map()
 
 
 
@@ -30,11 +34,14 @@ class GameSurface(object):
             elif event.key == pygame.K_RIGHT:
                 self.game.fetch_player().move(16, 0)
 
+            self.game.fetch_player().check_standing_tile(self.DUNGEON_MAP)
 
     def draw_surface(self):
         self.SURFACE.fill(
-            'purple'
+            'black'
         )
+
+        self.DUNGEON_MAP.draw_at(7, 4, self.SURFACE)
 
 
 

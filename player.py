@@ -116,6 +116,15 @@ class PlayerObject(pygame.sprite.Sprite):
     @property
     def y(self): return self.rect.y
 
+    def check_standing_tile(self, dungeon_mapping):
+        tX = (self.x / 16)
+        tY = (self.y / 16)
+
+        if tX >= dungeon_mapping.offset_x and tX <= dungeon_mapping.offset_x + (dungeon_mapping.map_width * 16):
+            if tY >= dungeon_mapping.offset_y and tY <= dungeon_mapping.offset_y + (dungeon_mapping.map_height * 16):
+                print("inside dungeon")
+
+
     def move(self, x : int, y : int, *args, **kwargs):
         new_pos = self.rect.move(x, y)
         self.rect.x, self.rect.y = new_pos.x, new_pos.y
