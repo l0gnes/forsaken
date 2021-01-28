@@ -13,7 +13,7 @@ class DungeonGenerator(object):
     def __init__(self, game, width, height, *args, **kwargs):
         self.game = game
         self.priority = kwargs.pop('priority', 100)
-        self.HALLWAY_GENERATOR = DungeonHallwayGenerator()
+        self.HALLWAY_GENERATOR = None
         self.DUNGEON_MAPPING = generate_void_dungeon_map(width, height)
 
 class DungeonRoomMap(object):
@@ -41,7 +41,7 @@ class DungeonRoomMap(object):
             for rownum, num in enumerate(colcont):
                 part = pygame.Surface((16, 16))
                 if num == enums.DungeonTiles.wall.value:
-                    part.fill('white')
+                    part.fill('grey')
                 elif num == enums.DungeonTiles.empty.value:
                     continue
                 elif num == enums.DungeonTiles.door.value:
@@ -102,9 +102,6 @@ class FileDungeonGenerator(DungeonGenerator):
 
 class boopDungeonGenerator(DungeonGenerator):
     def __init__(self, game, *args, **kwargs):
-        super().__init__(
-            prioity = 1, # Highest Priority
-        )
         self.game = game
 
         self.dungeon_size = self.game.DUNGEON_SIZE

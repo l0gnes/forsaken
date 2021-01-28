@@ -1,5 +1,5 @@
 import pygame
-import events, window, player, enums, sound, deco, animations
+import events, window, player, enums, sound, deco, animations, dungeons
 from utility import sethand, exthand, boop
 import importlib
 import glob
@@ -42,9 +42,13 @@ class GameHandler(object):
             # Extention Reference (ClassName) = Extension Object
         }
 
-        self.DUNGEON_SIZE = enums.DungeonRoomSize.medium # TODO: Allow users to change this at some point?
         self.EVENT_NOTIFIERS = dict()
         self.EVENT_LISTENERS = dict()
+
+        self.DUNGEON_SIZE = enums.DungeonRoomSize.medium # TODO: Allow users to change this at some point?
+        self.DUNGEON_GEN = dungeons.FileDungeonGenerator(self)
+        self.DUNGEON_MAP = self.DUNGEON_GEN.load_from_file('maptest.json')
+        #self.DUNGEON_MAP.print_map()
 
         self.addEventNotifier(self.setGamestate)
         self.addEventNotifier(self.start_new_game)

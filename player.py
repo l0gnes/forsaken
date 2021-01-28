@@ -149,3 +149,37 @@ class PlayerObject(pygame.sprite.Sprite):
         new_pos = self.rect.move(x, y)
         self.rect.x, self.rect.y = new_pos.x, new_pos.y
         return self.rect
+
+    def move_to_cord(self, x : int, y : int, *args, **kwargs):
+        return self.move(x * 16, y * 16)
+
+    def set_position(self, x : int, y : int, *args, **kwargs):
+        self.rect.x, self.rect.y = x, y
+        return self.rect
+
+    def set_position_coordinate(self, x : int, y : int, *args, **kwargs):
+        return self.set_position(x * 16, y * 16)
+
+    def control_hook(self, event):
+        if event.type == pygame.KEYDOWN:
+
+            plr = self
+
+            if event.key == pygame.K_DOWN:
+                if plr.can_move(self.GAME.DUNGEON_MAP, plr.x, plr.y + 16):
+                    plr.move(0, 16)
+
+            elif event.key == pygame.K_UP:
+                if plr.can_move(self.GAME.DUNGEON_MAP, plr.x, plr.y - 16):
+                    plr.move(0, -16)
+
+            elif event.key == pygame.K_LEFT:
+                if plr.can_move(self.GAME.DUNGEON_MAP, plr.x - 16, plr.y):
+                    plr.move(-16, 0)
+
+            elif event.key == pygame.K_RIGHT:
+                if plr.can_move(self.GAME.DUNGEON_MAP, plr.x + 16, plr.y):
+                    plr.move(16, 0)
+
+            x=plr.check_tile(self.GAME.DUNGEON_MAP)
+            print(x)
