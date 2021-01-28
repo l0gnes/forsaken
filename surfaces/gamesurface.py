@@ -24,17 +24,22 @@ class GameSurface(object):
     def event_hook(self, event):
         #print()
         if event.type == pygame.KEYDOWN:
-            print(event)
+            plr = self.game.fetch_player()
             if event.key == pygame.K_DOWN:
-                self.game.fetch_player().move(0, 16)
+                if plr.can_move(self.DUNGEON_MAP, plr.x, plr.y + 16):
+                    plr.move(0, 16)
             elif event.key == pygame.K_UP:
-                self.game.fetch_player().move(0, -16)
+                if plr.can_move(self.DUNGEON_MAP, plr.x, plr.y - 16):
+                    plr.move(0, -16)
             elif event.key == pygame.K_LEFT:
-                self.game.fetch_player().move(-16, 0)
+                if plr.can_move(self.DUNGEON_MAP, plr.x - 16, plr.y):
+                    plr.move(-16, 0)
             elif event.key == pygame.K_RIGHT:
-                self.game.fetch_player().move(16, 0)
+                if plr.can_move(self.DUNGEON_MAP, plr.x + 16, plr.y):
+                    plr.move(16, 0)
 
-            self.game.fetch_player().check_standing_tile(self.DUNGEON_MAP)
+            x=plr.check_tile(self.DUNGEON_MAP)
+            print(x)
 
     def draw_surface(self):
         self.SURFACE.fill(

@@ -64,6 +64,11 @@ class PlayerObject(pygame.sprite.Sprite):
         self.INVENTORY = inventory.InventoryHandler(self)
         self.EQUIPS = EquipmentManager(self)
 
+        # Things the player can't walk through
+        self.COLLIDES_WITH = (
+            enums.DungeonTiles.wall,
+        )
+
     def draw_entity(self, screen):
         screen.blit(self.image, (self.location))
 
@@ -116,20 +121,31 @@ class PlayerObject(pygame.sprite.Sprite):
     @property
     def y(self): return self.rect.y
 
-    def check_standing_tile(self, dungeon_mapping):
-        tX = (self.x / 16)
-        tY = (self.y / 16)
+    def check_tile(self, dungeon_mapping, x : int = None, y : int = None):
+        if x is None and y is None:
+            tX = (self.x / 16)
+            tY = (self.y / 16)
+        else:
+            tX, tY = x, y
 
-        if tX >= dungeon_mapping.offset_x and tX <= dungeon_mapping.offset_x + (dungeon_mapping.map_width * 16):
-            if tY >= dungeon_mapping.offset_y and tY <= dungeon_mapping.offset_y + (dungeon_mapping.map_height * 16):
-                print("inside dungeon")
+        print(dungeon_mapping.map_width)
+        if tX >= dungeon_mapping.offset_x and tX <= (dungeon_mapping.offset_x + dungeon_mapping.map_width) - 1:
+            if tY >= dungeon_mapping.offset_y and tY <= dungeon_mapping.offset_y + dungeon_mapping.map_height - 1:
+
+                tXAO = tX - dungeon_mapping.offset_x
+                tYAO = tY - dungeon_mapping.offset_y
+
+                print(tXAO, tYAO, sep='\t')
+
+                return dungeon_mapping.fetch_tile(int(tXAO), int(tYAO))
+        return enums.DungeonTiles.DUNGEON_VOID # User probably isn't on a tile
+
+    def can_move(self, dungeon_mapping, x, y):
+        tile = self.check_tile(dungeon_mapping, x / 16, y / 16)
+        return tile not in self.COLLIDES_WITH
 
 
     def move(self, x : int, y : int, *args, **kwargs):
         new_pos = self.rect.move(x, y)
         self.rect.x, self.rect.y = new_pos.x, new_pos.y
         return self.rect
-
-if __name__ == "__main__":
-    char = PlayerObject()
-    print(char.height, char.width, sep='\t')
