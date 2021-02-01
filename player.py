@@ -65,6 +65,7 @@ class PlayerObject(pygame.sprite.Sprite):
         self.EQUIPS = EquipmentManager(self)
 
         # Things the player can't walk through
+        self.COLLISION_OFFSETS = (0, 0) # X, Y
         self.COLLIDES_WITH = (
             enums.DungeonTiles.wall,
         )
@@ -121,14 +122,19 @@ class PlayerObject(pygame.sprite.Sprite):
     @property
     def y(self): return self.rect.y
 
+    @property
+    def coordinates(self):
+        return (self.x / 16, self.y / 16)
+
     def check_tile(self, dungeon_mapping, x : int = None, y : int = None):
         if x is None and y is None:
-            tX = (self.x / 16)
+            tX = (self.x / 16) 
             tY = (self.y / 16)
         else:
             tX, tY = x, y
+            
+        tX, tY = tX + self.COLLISION_OFFSETS[0], tY + self.COLLISION_OFFSETS[1]
 
-        print(dungeon_mapping.map_width)
         if tX >= dungeon_mapping.offset_x and tX <= (dungeon_mapping.offset_x + dungeon_mapping.map_width) - 1:
             if tY >= dungeon_mapping.offset_y and tY <= dungeon_mapping.offset_y + dungeon_mapping.map_height - 1:
 
@@ -142,8 +148,8 @@ class PlayerObject(pygame.sprite.Sprite):
 
     def can_move(self, dungeon_mapping, x, y):
         tile = self.check_tile(dungeon_mapping, x / 16, y / 16)
+        print(x / 16, y / 16, sep='\t')
         return tile not in self.COLLIDES_WITH
-
 
     def move(self, x : int, y : int, *args, **kwargs):
         new_pos = self.rect.move(x, y)
@@ -183,3 +189,15 @@ class PlayerObject(pygame.sprite.Sprite):
 
             x=plr.check_tile(self.GAME.DUNGEON_MAP)
             print(x)
+
+    def partition_screen_w_offsets(self, offx, offy):
+        w, h = self.GAME.WindowHandle.screen.get_size()
+        W,H = w/16, h/16 # Point based coordinate scheme
+        return W + offx, H + offy
+
+    def draw_with_camera(self, screen, offx, offy):
+        w, h = self.partition_screen_w_offsets(offx, offy)
+
+        x1, y1 = self.coordinates
+        x2, y2 = (x1 + offx) * 16, (y1 + offy) * 16
+        screen.blit(self.image, (x2,y2))

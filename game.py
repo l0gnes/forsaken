@@ -86,7 +86,6 @@ class GameHandler(object):
         p = self.ENTITY_CACHE.pull_important('PLAYER')
         return p # P may be none, meaning that no player object has spawned in
 
-
     def start_game_loop(self, *args, **kwargs):
 
         LoadingScreen(self).draw_surface()
@@ -109,6 +108,7 @@ class GameHandler(object):
         self.LOGGING.info("Game is now running!")
         self.GAMESTATE = self.setGamestate(enums.GameState.menu_screen)
         self.WindowHandle.ACTIVE_SURFACE = self.WindowHandle.SURFACE_CACHE['menu']
+        
         while self.RUNNING:
             self.EventHandle.handle_events()
             self.AnimationHandler.do_animations()
