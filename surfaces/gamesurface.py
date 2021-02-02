@@ -1,5 +1,4 @@
 import pygame
-from mcm import MovingCameraManager
 import player
 import monsters
 import dungeons

@@ -77,7 +77,7 @@ class GameHandler(object):
 
     @deco.FUNC_EVENT_CALLER("start_new_game")
     def start_new_game(self):
-        self.GAMESTATE = enums.GameState.playing
+        self.setGamestate(enums.GameState.playing)
 
     # Quick function to get player object
     def fetch_player(self):
@@ -102,7 +102,6 @@ class GameHandler(object):
         self.ExtensionHandler = exthand.ExtensionHandler(self)
 
         # Extensions stuff
-        print(self.SoundHandle.SOUNDS)
         self.ExtensionHandler.init()
 
         self.LOGGING.info("Game is now running!")
