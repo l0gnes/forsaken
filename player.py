@@ -64,6 +64,12 @@ class PlayerObject(pygame.sprite.Sprite):
         self.INVENTORY = inventory.InventoryHandler(self)
         self.EQUIPS = EquipmentManager(self)
 
+        # Things the player can't walk through
+        self.COLLISION_OFFSETS = (0, 0) # X, Y
+        self.COLLIDES_WITH = (
+            enums.DungeonTiles.wall,
+        )
+
     def draw_entity(self, screen):
         screen.blit(self.image, (self.location))
 
@@ -116,20 +122,82 @@ class PlayerObject(pygame.sprite.Sprite):
     @property
     def y(self): return self.rect.y
 
-    def check_standing_tile(self, dungeon_mapping):
-        tX = (self.x / 16)
-        tY = (self.y / 16)
+    @property
+    def coordinates(self):
+        return (self.x / 16, self.y / 16)
 
-        if tX >= dungeon_mapping.offset_x and tX <= dungeon_mapping.offset_x + (dungeon_mapping.map_width * 16):
-            if tY >= dungeon_mapping.offset_y and tY <= dungeon_mapping.offset_y + (dungeon_mapping.map_height * 16):
-                print("inside dungeon")
+    def check_tile(self, dungeon_mapping, x : int = None, y : int = None):
+        if x is None and y is None:
+            tX = (self.x / 16) 
+            tY = (self.y / 16)
+        else:
+            tX, tY = x, y
+            
+        tX, tY = tX + self.COLLISION_OFFSETS[0], tY + self.COLLISION_OFFSETS[1]
 
+        if tX >= dungeon_mapping.offset_x and tX <= (dungeon_mapping.offset_x + dungeon_mapping.map_width) - 1:
+            if tY >= dungeon_mapping.offset_y and tY <= dungeon_mapping.offset_y + dungeon_mapping.map_height - 1:
+
+                tXAO = tX - dungeon_mapping.offset_x
+                tYAO = tY - dungeon_mapping.offset_y
+
+                print(tXAO, tYAO, sep='\t')
+
+                return dungeon_mapping.fetch_tile(int(tXAO), int(tYAO))
+        return enums.DungeonTiles.DUNGEON_VOID # User probably isn't on a tile
+
+    def can_move(self, dungeon_mapping, x, y):
+        tile = self.check_tile(dungeon_mapping, x / 16, y / 16)
+        print(x / 16, y / 16, sep='\t')
+        return tile not in self.COLLIDES_WITH
 
     def move(self, x : int, y : int, *args, **kwargs):
         new_pos = self.rect.move(x, y)
         self.rect.x, self.rect.y = new_pos.x, new_pos.y
         return self.rect
 
-if __name__ == "__main__":
-    char = PlayerObject()
-    print(char.height, char.width, sep='\t')
+    def move_to_cord(self, x : int, y : int, *args, **kwargs):
+        return self.move(x * 16, y * 16)
+
+    def set_position(self, x : int, y : int, *args, **kwargs):
+        self.rect.x, self.rect.y = x, y
+        return self.rect
+
+    def set_position_coordinate(self, x : int, y : int, *args, **kwargs):
+        return self.set_position(x * 16, y * 16)
+
+    def control_hook(self, event):
+        if event.type == pygame.KEYDOWN:
+
+            plr = self
+
+            if event.key == pygame.K_DOWN:
+                if plr.can_move(self.GAME.DUNGEON_MAP, plr.x, plr.y + 16):
+                    plr.move(0, 16)
+
+            elif event.key == pygame.K_UP:
+                if plr.can_move(self.GAME.DUNGEON_MAP, plr.x, plr.y - 16):
+                    plr.move(0, -16)
+
+            elif event.key == pygame.K_LEFT:
+                if plr.can_move(self.GAME.DUNGEON_MAP, plr.x - 16, plr.y):
+                    plr.move(-16, 0)
+
+            elif event.key == pygame.K_RIGHT:
+                if plr.can_move(self.GAME.DUNGEON_MAP, plr.x + 16, plr.y):
+                    plr.move(16, 0)
+
+            x=plr.check_tile(self.GAME.DUNGEON_MAP)
+            print(x)
+
+    def partition_screen_w_offsets(self, offx, offy):
+        w, h = self.GAME.WindowHandle.screen.get_size()
+        W,H = w/16, h/16 # Point based coordinate scheme
+        return W + offx, H + offy
+
+    def draw_with_camera(self, screen, offx, offy):
+        w, h = self.partition_screen_w_offsets(offx, offy)
+
+        x1, y1 = self.coordinates
+        x2, y2 = (x1 + offx) * 16, (y1 + offy) * 16
+        screen.blit(self.image, (x2,y2))

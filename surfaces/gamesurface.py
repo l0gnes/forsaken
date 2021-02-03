@@ -1,8 +1,9 @@
 import pygame
-from mcm import MovingCameraManager
 import player
 import monsters
 import dungeons
+#import itertools
+
 
 class GameSurface(object):
     def __init__(self, game, *args, **kwargs):
@@ -12,40 +13,65 @@ class GameSurface(object):
             size = self.game.screen.get_size()
         )
 
-        self.mcm = MovingCameraManager(self.game, self.SURFACE)
+        #self.mcm = MovingCameraManager(self.game, self.SURFACE)
         self.game.ENTITY_CACHE.push_important("PLAYER", player.PlayerObject(self.game))
+        self.game.fetch_player().set_position_coordinate(10, 10)
 
-        self.DUNGEON_GEN = dungeons.FileDungeonGenerator(self.game)
-        self.DUNGEON_MAP = self.DUNGEON_GEN.load_from_file('maptest.json')
-        self.DUNGEON_MAP.print_map()
+        # New Camera Management inside this file
+        self.CAMERA_OFFSET_X = 0
+        self.CAMERA_OFFSET_Y = 0
 
+        # However many points (points on the map where a tile can be drawn)
+        # which the camera will check for before shifting the offsets defined
+        # above, which render the map differently. (CONSTANT SETTING)
+        self.CAMERA_OFFSET_CAP_POINTS = 4
+
+    def get_camera_partition(self):
+        w, h = self.game.WindowHandle.screen.get_size()
+        W,H = w/16, h/16 # Point based coordinate scheme
+        return W + self.CAMERA_OFFSET_X, H + self.CAMERA_OFFSET_Y
+
+    def camera_check_hook(self, event):
+        # Player coordinates
+        if event.type == pygame.KEYDOWN:
+            x, y = self.game.fetch_player().coordinates
+            #partition = self.get_camera_partition()
+            w, h = self.game.WindowHandle.screen.get_size()
+            W, H = w / 16 , h / 16
+            #print(partition)
+
+            if not x + self.CAMERA_OFFSET_X >= self.CAMERA_OFFSET_CAP_POINTS:
+                self.CAMERA_OFFSET_X += 1
+
+            elif x + self.CAMERA_OFFSET_X >= W - self.CAMERA_OFFSET_CAP_POINTS:
+                self.CAMERA_OFFSET_X -= 1
+
+            # ---------------------------------------------------------------------------------------
+
+            if not y + self.CAMERA_OFFSET_Y >= self.CAMERA_OFFSET_CAP_POINTS:
+                self.CAMERA_OFFSET_Y += 1
+
+            elif y + self.CAMERA_OFFSET_Y >= H - self.CAMERA_OFFSET_CAP_POINTS:
+                self.CAMERA_OFFSET_Y -= 1
+
+            self.game.fetch_player().COLLISION_OFFSETS = (self.CAMERA_OFFSET_X, self.CAMERA_OFFSET_Y)
 
 
     def event_hook(self, event):
-        #print()
-        if event.type == pygame.KEYDOWN:
-            print(event)
-            if event.key == pygame.K_DOWN:
-                self.game.fetch_player().move(0, 16)
-            elif event.key == pygame.K_UP:
-                self.game.fetch_player().move(0, -16)
-            elif event.key == pygame.K_LEFT:
-                self.game.fetch_player().move(-16, 0)
-            elif event.key == pygame.K_RIGHT:
-                self.game.fetch_player().move(16, 0)
+        # Handles player controls on this screen
+        self.game.fetch_player().control_hook(event)
 
-            self.game.fetch_player().check_standing_tile(self.DUNGEON_MAP)
+        # Handles camera movement
+        self.camera_check_hook(event)
 
     def draw_surface(self):
         self.SURFACE.fill(
             'black'
         )
 
-        self.DUNGEON_MAP.draw_at(7, 4, self.SURFACE)
+        self.game.DUNGEON_MAP.draw_at(0 + self.CAMERA_OFFSET_X, 0 + self.CAMERA_OFFSET_Y, self.SURFACE)
 
-
-
-
-        self.game.ENTITY_CACHE.draw_all_entities(self.SURFACE)
+        #self.game.ENTITY_CACHE.draw_all_entities(self.SURFACE)
+        self.game.fetch_player().draw_with_camera(self.SURFACE, self.CAMERA_OFFSET_X, self.CAMERA_OFFSET_Y)
         #self.mcm.render_bottom_level_mapping(self.SURFACE)
         self.game.screen.blit(self.SURFACE, (0, 0))

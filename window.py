@@ -65,7 +65,6 @@ class WindowHandler(object):
         self.screen.blit(self.FADE, (0, 0))
 
     def do_with_fade(self, func):
-        print('sex?')
         if not hasattr(func, '__call__'):
             raise ValueError("Function has no call?")
 

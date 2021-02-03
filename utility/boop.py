@@ -132,3 +132,11 @@ class EntityCache(object):
             return tuple(self.all_entities.values())[self._n-1]
         else:
             raise StopIteration
+
+def fade_array(L : list):
+    """
+    Copies an array to the end of itself so the numbers can fade
+    1, 2, 3 -> 1, 2, 3, 2, 1
+    """
+    L.extend(reversed(L[1:-1]))
+    return L

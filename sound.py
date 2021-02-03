@@ -22,7 +22,30 @@ class SoundHandler(object):
         self.load_sounds()
         self.load_music()
 
+        # These will obviously need a menu in the future.
+        self.MUSIC_MUTED = False
+        self.SOUNDS_MUTED = False
+        self.BASE_SOUNDS_VOLUME = 100
+        self.BASE_MUSIC_VOLUME = 100
+        self.MASTER_VOLUME = 25 # The volume of the whole game
+
         self.game.addEventListener("setGamestate", self.play_menu_stuff)
+
+    @property
+    def MUSIC_VOLUME(self):
+        return float(self.BASE_MUSIC_VOLUME / 100) * self.MASTER_VOLUME_INFLUENCE
+
+    @property
+    def SOUNDS_VOLUME(self):
+        return float(self.BASE_SOUNDS_VOLUME / 100) * self.MASTER_VOLUME_INFLUENCE
+
+    @property
+    def MASTER_VOLUME_INFLUENCE(self):
+        return self.MASTER_VOLUME / 100
+
+    def refresh_channel_volumes(self):
+        print('SETTING MUSIC VOLUME TO `%s`' % self.MUSIC_VOLUME)
+        self.MUSIC_CHANNEL.set_volume(self.MUSIC_VOLUME)
 
     def make_sure_init(self):
         if not pygame.mixer.get_init():
@@ -56,6 +79,7 @@ class SoundHandler(object):
 
     @deco.FUNC_EVENT_CALLER('play_music')
     def play_music(self, soundref, loop : bool = True, stop_on_scene_switch : bool = True, *args, **kwargs):
+        self.refresh_channel_volumes()
         self.game.LOGGING.debug("Attempting to play the song: %s" % soundref)
         self.MUSIC_SOSS = stop_on_scene_switch
         self.MUSIC_CHANNEL.play(
@@ -70,11 +94,19 @@ class SoundHandler(object):
                 self.SoundHandle.play_music('bouncy boi')
             else:
                 self.play_music('bouncy boi')
+        elif gamestate == GameState.playing:
+            if hasattr(self, 'RUNNING'):
+                self.SoundHandle.play_music('damp')
+            else:
+                self.play_music('damp')
+    
 
     @deco.FUNC_EVENT_CALLER('attempt_play')
     def attempt_play(self, soundref, *args, **kwargs):
         self.game.LOGGING.debug("Attempting to play a sound \"%s\"" % soundref)
-        pygame.mixer.find_channel().play(self.SOUNDS[soundref], *args, **kwargs)
+        c = pygame.mixer.find_channel()
+        c.set_volume(self.SOUNDS_VOLUME)
+        c.play(self.SOUNDS[soundref], *args, **kwargs)
 
 
         

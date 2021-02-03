@@ -13,7 +13,7 @@ class DungeonGenerator(object):
     def __init__(self, game, width, height, *args, **kwargs):
         self.game = game
         self.priority = kwargs.pop('priority', 100)
-        self.HALLWAY_GENERATOR = DungeonHallwayGenerator()
+        self.HALLWAY_GENERATOR = None
         self.DUNGEON_MAPPING = generate_void_dungeon_map(width, height)
 
 class DungeonRoomMap(object):
@@ -24,12 +24,14 @@ class DungeonRoomMap(object):
         self.offset_x = None
         self.offset_y = None
 
+    def fetch_tile(self, x : int, y : int):
+        return enums.DungeonTiles(self._mapping[y][x])
+
     def print_map(self):
         for i in self._mapping:
             print(''.join(str(i)))
 
     def draw_at(self, x, y, screen):
-        print(self.map_height)
         w, h = len(self._mapping[0]), len(self._mapping)
         self.offset_x, self.offset_y = x, y
         sur = pygame.Surface((w * 16, h * 16))
@@ -39,7 +41,7 @@ class DungeonRoomMap(object):
             for rownum, num in enumerate(colcont):
                 part = pygame.Surface((16, 16))
                 if num == enums.DungeonTiles.wall.value:
-                    part.fill('white')
+                    part.fill('grey')
                 elif num == enums.DungeonTiles.empty.value:
                     continue
                 elif num == enums.DungeonTiles.door.value:
@@ -58,7 +60,7 @@ class DungeonRoomMap(object):
         if len(self._mapping) == 0:
             return 0
 
-        return len(self._mapping[:1]) # Grabs the length of the first width
+        return len(self._mapping[0]) # Grabs the length of the first width
 
     @property
     def map_height(self):
@@ -100,9 +102,6 @@ class FileDungeonGenerator(DungeonGenerator):
 
 class boopDungeonGenerator(DungeonGenerator):
     def __init__(self, game, *args, **kwargs):
-        super().__init__(
-            prioity = 1, # Highest Priority
-        )
         self.game = game
 
         self.dungeon_size = self.game.DUNGEON_SIZE

@@ -1,5 +1,5 @@
 import pygame
-import events, window, player, enums, sound, deco, animations
+import events, window, player, enums, sound, deco, animations, dungeons
 from utility import sethand, exthand, boop
 import importlib
 import glob
@@ -42,9 +42,13 @@ class GameHandler(object):
             # Extention Reference (ClassName) = Extension Object
         }
 
-        self.DUNGEON_SIZE = enums.DungeonRoomSize.medium # TODO: Allow users to change this at some point?
         self.EVENT_NOTIFIERS = dict()
         self.EVENT_LISTENERS = dict()
+
+        self.DUNGEON_SIZE = enums.DungeonRoomSize.medium # TODO: Allow users to change this at some point?
+        self.DUNGEON_GEN = dungeons.FileDungeonGenerator(self)
+        self.DUNGEON_MAP = self.DUNGEON_GEN.load_from_file('maptest.json')
+        #self.DUNGEON_MAP.print_map()
 
         self.addEventNotifier(self.setGamestate)
         self.addEventNotifier(self.start_new_game)
@@ -73,7 +77,7 @@ class GameHandler(object):
 
     @deco.FUNC_EVENT_CALLER("start_new_game")
     def start_new_game(self):
-        self.GAMESTATE = enums.GameState.playing
+        self.setGamestate(enums.GameState.playing)
 
     # Quick function to get player object
     def fetch_player(self):
@@ -81,7 +85,6 @@ class GameHandler(object):
 
         p = self.ENTITY_CACHE.pull_important('PLAYER')
         return p # P may be none, meaning that no player object has spawned in
-
 
     def start_game_loop(self, *args, **kwargs):
 
@@ -99,12 +102,12 @@ class GameHandler(object):
         self.ExtensionHandler = exthand.ExtensionHandler(self)
 
         # Extensions stuff
-        print(self.SoundHandle.SOUNDS)
         self.ExtensionHandler.init()
 
         self.LOGGING.info("Game is now running!")
         self.GAMESTATE = self.setGamestate(enums.GameState.menu_screen)
         self.WindowHandle.ACTIVE_SURFACE = self.WindowHandle.SURFACE_CACHE['menu']
+        
         while self.RUNNING:
             self.EventHandle.handle_events()
             self.AnimationHandler.do_animations()
