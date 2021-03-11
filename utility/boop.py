@@ -140,3 +140,36 @@ def fade_array(L : list):
     """
     L.extend(reversed(L[1:-1]))
     return L
+
+class bCordsWrapper(object):
+    def __init__(self, a, b, add_to_all : int = 0):
+        self.x1 = a[0]
+        self.x2 = b[0]
+
+        self.y1 = a[1]
+        self.y2 = b[1]
+        self.add_to_all = add_to_all
+
+    @property
+    def top_left(self):
+        return self.x1, self.y1
+
+    @property
+    def bottom_right(self):
+        return self.x2, self.y2
+
+    @property
+    def ppTL(self):
+        return self.x1 * 16 + self.add_to_all, self.y1 * 16 + self.add_to_all
+
+    @property
+    def ppBR(self):
+        return self.x2 * 16 + self.add_to_all, self.y2 * 16 + self.add_to_all
+
+    @property
+    def ppdistWidth(self):
+        return int((self.x2 * 16) - (self.x1 * 16))
+
+    @property
+    def ppdistHeight(self):
+        return (self.y2 * 16) - (self.y1 * 16)

@@ -45,9 +45,10 @@ class GameHandler(object):
         self.EVENT_NOTIFIERS = dict()
         self.EVENT_LISTENERS = dict()
 
-        self.DUNGEON_SIZE = enums.DungeonRoomSize.medium # TODO: Allow users to change this at some point?
-        self.DUNGEON_GEN = dungeons.FileDungeonGenerator(self)
-        self.DUNGEON_MAP = self.DUNGEON_GEN.load_from_file('maptest.json')
+        self.DUNGEON_SIZE = enums.DungeonRoomSize.large # TODO: Allow users to change this at some point?
+        self.DUNGEON_GEN = dungeons.boopDungeonGenerator(self)
+        self.DUNGEON_MAP = self.DUNGEON_GEN.sex()
+        self.DUNGEON_MAP.print_map()
         #self.DUNGEON_MAP.print_map()
 
         self.addEventNotifier(self.setGamestate)
@@ -86,6 +87,7 @@ class GameHandler(object):
         p = self.ENTITY_CACHE.pull_important('PLAYER')
         return p # P may be none, meaning that no player object has spawned in
 
+
     def start_game_loop(self, *args, **kwargs):
 
         LoadingScreen(self).draw_surface()
@@ -102,12 +104,12 @@ class GameHandler(object):
         self.ExtensionHandler = exthand.ExtensionHandler(self)
 
         # Extensions stuff
+        print(self.SoundHandle.SOUNDS)
         self.ExtensionHandler.init()
 
         self.LOGGING.info("Game is now running!")
         self.GAMESTATE = self.setGamestate(enums.GameState.menu_screen)
         self.WindowHandle.ACTIVE_SURFACE = self.WindowHandle.SURFACE_CACHE['menu']
-        
         while self.RUNNING:
             self.EventHandle.handle_events()
             self.AnimationHandler.do_animations()

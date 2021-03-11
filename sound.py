@@ -27,7 +27,7 @@ class SoundHandler(object):
         self.SOUNDS_MUTED = False
         self.BASE_SOUNDS_VOLUME = 100
         self.BASE_MUSIC_VOLUME = 100
-        self.MASTER_VOLUME = 25 # The volume of the whole game
+        self.MASTER_VOLUME = 0 # The volume of the whole game
 
         self.game.addEventListener("setGamestate", self.play_menu_stuff)
 

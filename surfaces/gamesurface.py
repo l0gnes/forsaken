@@ -26,6 +26,13 @@ class GameSurface(object):
         # above, which render the map differently. (CONSTANT SETTING)
         self.CAMERA_OFFSET_CAP_POINTS = 4
 
+    @property
+    def CAMERA_OFFSETS(self):
+        return (
+            self.CAMERA_OFFSET_X,
+            self.CAMERA_OFFSET_Y
+        )
+
     def get_camera_partition(self):
         w, h = self.game.WindowHandle.screen.get_size()
         W,H = w/16, h/16 # Point based coordinate scheme
@@ -68,8 +75,14 @@ class GameSurface(object):
         self.SURFACE.fill(
             'black'
         )
+        
+        self.game.DUNGEON_MAP.old_draw_at(self.CAMERA_OFFSET_X, self.CAMERA_OFFSET_Y, self.SURFACE)
+        self.game.DUNGEON_MAP.new_draw_at(self.CAMERA_OFFSET_X, self.CAMERA_OFFSET_Y, self.SURFACE)
+        #x = self.game.DUNGEON_MAP.get_line_chunks()
+        #print(x)
 
-        self.game.DUNGEON_MAP.draw_at(0 + self.CAMERA_OFFSET_X, 0 + self.CAMERA_OFFSET_Y, self.SURFACE)
+        pygame.draw.line(self.SURFACE, 'red', (32, 32), (64, 32), 16)
+        
 
         #self.game.ENTITY_CACHE.draw_all_entities(self.SURFACE)
         self.game.fetch_player().draw_with_camera(self.SURFACE, self.CAMERA_OFFSET_X, self.CAMERA_OFFSET_Y)
