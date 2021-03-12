@@ -45,10 +45,10 @@ class GameHandler(object):
         self.EVENT_NOTIFIERS = dict()
         self.EVENT_LISTENERS = dict()
 
-        self.DUNGEON_SIZE = enums.DungeonRoomSize.large # TODO: Allow users to change this at some point?
+        self.DUNGEON_SIZE = enums.DungeonRoomSize.medium # TODO: Allow users to change this at some point?
         self.DUNGEON_GEN = dungeons.boopDungeonGenerator(self)
         self.DUNGEON_MAP = self.DUNGEON_GEN.sex()
-        self.DUNGEON_MAP.print_map()
+        
         #self.DUNGEON_MAP.print_map()
 
         self.addEventNotifier(self.setGamestate)

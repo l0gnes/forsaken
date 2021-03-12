@@ -76,13 +76,7 @@ class GameSurface(object):
             'black'
         )
         
-        self.game.DUNGEON_MAP.old_draw_at(self.CAMERA_OFFSET_X, self.CAMERA_OFFSET_Y, self.SURFACE)
-        self.game.DUNGEON_MAP.new_draw_at(self.CAMERA_OFFSET_X, self.CAMERA_OFFSET_Y, self.SURFACE)
-        #x = self.game.DUNGEON_MAP.get_line_chunks()
-        #print(x)
-
-        pygame.draw.line(self.SURFACE, 'red', (32, 32), (64, 32), 16)
-        
+        self.game.DUNGEON_MAP.new_draw_at(self.CAMERA_OFFSET_X, self.CAMERA_OFFSET_Y, self.SURFACE)        
 
         #self.game.ENTITY_CACHE.draw_all_entities(self.SURFACE)
         self.game.fetch_player().draw_with_camera(self.SURFACE, self.CAMERA_OFFSET_X, self.CAMERA_OFFSET_Y)
