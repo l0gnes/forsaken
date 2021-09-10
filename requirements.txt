@@ -1,4 +1,3 @@
 pygame
-importlib
-json
+pypresence
 ruamel.yaml
