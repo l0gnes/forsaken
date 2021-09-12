@@ -141,14 +141,11 @@ class PlayerObject(pygame.sprite.Sprite):
                 tXAO = tX - dungeon_mapping.offset_x
                 tYAO = tY - dungeon_mapping.offset_y
 
-                print(tXAO, tYAO, sep='\t')
-
                 return dungeon_mapping.fetch_tile(int(tXAO), int(tYAO))
         return enums.DungeonTiles.DUNGEON_VOID # User probably isn't on a tile
 
     def can_move(self, dungeon_mapping, x, y):
         tile = self.check_tile(dungeon_mapping, x / 16, y / 16)
-        print(x / 16, y / 16, sep='\t')
         return tile not in self.COLLIDES_WITH
 
     def move(self, x : int, y : int, *args, **kwargs):
@@ -188,7 +185,6 @@ class PlayerObject(pygame.sprite.Sprite):
                     plr.move(16, 0)
 
             x=plr.check_tile(self.GAME.DUNGEON_MAP)
-            print(x)
 
     def partition_screen_w_offsets(self, offx, offy):
         w, h = self.GAME.WindowHandle.screen.get_size()
