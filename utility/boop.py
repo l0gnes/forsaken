@@ -43,6 +43,23 @@ def draw_mem_counter(screen):
 
     screen.blit(sur, (5, 20))
 
+def draw_player_pos(screen, player):
+    # Make sure this is here so i dont forget
+    if not pygame.font.get_init():
+        print("> boop.py | Force init pygame.font")
+        pygame.font.init()
+
+    fp = pygame.font.get_default_font() # Gets system font
+    font = pygame.font.Font(fp, 12)
+
+    sur = font.render(
+        f"X: {int(player.x / 16)} || Y: {int(player.y / 16)}" if player else "No Player Spawned",
+        True, # Antialias
+        (255, 255, 255)
+    )
+
+    screen.blit(sur, (5, 40))
+
 class EnumeratingTicker():
     def __init__(self, fps : int, maxtick : int = 20):
         self.fps = fps

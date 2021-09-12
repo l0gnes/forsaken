@@ -25,6 +25,7 @@ class GameHandler(object):
         self.SETTINGS = settings
 
         self.LOGGING = self.init_logging()
+        self.DEBUG_MODE = False
 
         # Some important variables
         self.RUNNING = True
@@ -46,8 +47,8 @@ class GameHandler(object):
         self.EVENT_LISTENERS = dict()
 
         self.DUNGEON_SIZE = enums.DungeonRoomSize.medium # TODO: Allow users to change this at some point?
-        self.DUNGEON_GEN = dungeons.boopDungeonGenerator(self)
-        self.DUNGEON_MAP = self.DUNGEON_GEN.sex()
+        self.DUNGEON_GEN = dungeons.boopDungeonGeneratorV2(self)
+        self.DUNGEON_MAP = self.DUNGEON_GEN.generateMap()
         
         #self.DUNGEON_MAP.print_map()
 
@@ -104,7 +105,7 @@ class GameHandler(object):
         self.ExtensionHandler = exthand.ExtensionHandler(self)
 
         # Extensions stuff
-        print(self.SoundHandle.SOUNDS)
+        #print(self.SoundHandle.SOUNDS)
         self.ExtensionHandler.init()
 
         self.LOGGING.info("Game is now running!")

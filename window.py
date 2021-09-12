@@ -42,11 +42,10 @@ class WindowHandler(object):
 
     def draw_nerd_display(self, force : bool = False):
        
-        if self.settings.fetch('fps-display'):
+        if self.game.DEBUG_MODE:
             boop.draw_fps_counter(self.screen, self.clock)
-
-        if self.settings.fetch('ram-display'):
             boop.draw_mem_counter(self.screen)
+            boop.draw_player_pos(self.screen, self.game.fetch_player())
 
     def do_init_stuff(self):
         self.cache_surfaces() # Caches surfaces so im not constantly creating menus

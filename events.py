@@ -20,6 +20,9 @@ class EventHandler(object):
         if event.key == pygame.K_q:
             pygame.quit()
 
+        if event.key == pygame.K_F3:
+            self.game.DEBUG_MODE = not self.game.DEBUG_MODE
+
     def handle_events(self):
         ev = pygame.event.poll()
 
