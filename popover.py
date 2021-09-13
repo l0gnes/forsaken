@@ -12,9 +12,12 @@ class PopoverWindow(object):
     identifier = None
     active = False # Whether or not the popover should be able to be interacted with
 
+
     def __init__(self, game, width : int, height : int, *args, **kwargs):
         self.game = game
         self.SURFACE = Surface((width, height))
+
+
 
     def create_default_popover(self):
         """
@@ -22,11 +25,15 @@ class PopoverWindow(object):
         """
         self.SURFACE.fill('purple')
 
+
+
     def draw_popover(self):
         """
         This is to be written over, this is what is called to draw the popover onto the screen.
         """
         raise NotImplementedError("No popover could be drawn.")
+
+
 
     def _event_hook_runner(self, event):
         """
@@ -36,19 +43,26 @@ class PopoverWindow(object):
         if self.active:
             return self.event_hook(event)
 
+
+
     def event_hook(self, event):
         """this window's event listener, this is also meant to be written over."""
         return
+
+
 
 class PopoverHandler(object):
     """
         Handles pop-over storing, enabling, disabling and everything in between.
     """
 
+
+
     def __init__(self, game, *args, **kwargs):
         self.game = game
-
         self.popovers = {}
+
+
 
     def fetch_active_popovers(self):
         return list(
@@ -56,6 +70,8 @@ class PopoverHandler(object):
                 lambda popover: popover.active, self.popovers.values()
             )
         )
+
+
 
     def register_popover(self, popoverName : str, popover : PopoverWindow) -> None:
         """
