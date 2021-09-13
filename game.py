@@ -1,5 +1,5 @@
 import pygame
-import events, window, player, enums, sound, deco, animations, dungeons
+import events, window, player, enums, sound, deco, animations, dungeons, popovers
 from utility import sethand, exthand, boop
 import importlib
 import glob
@@ -101,6 +101,16 @@ class GameHandler(object):
         self.SoundHandle = sound.SoundHandler(self)
         self.WindowHandle = window.WindowHandler(self)
         self.AnimationHandler = animations.AnimationHandler(self)
+
+        self.PopoverHandler = popovers.PopoverHandler(self)
+        self.EventHandle.register_many_hooks(
+                list(
+                    map(
+                        lambda po: po._event_hook_runner,
+                        self.PopoverHandler.popovers
+                    )
+                )
+            )
 
         self.ExtensionHandler = exthand.ExtensionHandler(self)
 
